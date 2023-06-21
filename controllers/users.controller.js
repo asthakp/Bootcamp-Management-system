@@ -253,16 +253,9 @@ const hashedPass = async (password) => {
 
 export const getUser = async (req, res) => {
   try {
-    const users = await User.find();
-    return res.status(200).json({
-      status: true,
-      data: users,
-    });
+    return res.status(200).json(res.filteredResult);
   } catch (error) {
-    return res.status(400).json({
-      status: false,
-      error: error.message,
-    });
+    console.log(error);
   }
 };
 
