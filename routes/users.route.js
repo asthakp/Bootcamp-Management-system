@@ -18,7 +18,34 @@ import { filteredResults } from "../middlewares/filteredResults.middleware.js";
 import User from "../models/users.model.js";
 
 const router = express.Router();
+//swagger example available on https://dev.to/kabartolo/how-to-document-an-express-api-with-swagger-ui-and-jsdoc-50do
 
+/**
+ * @swagger
+ * /user/register:
+ *   post:
+ *     summary: Register a user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             example:
+ *               name: John Doe
+ *               email: example@gmail.com
+ *               password: User123#
+ *     responses:
+ *       201:
+ *         ...
+ */
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.patch("/logout", authMiddleware, logoutUser);

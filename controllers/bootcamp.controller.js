@@ -44,9 +44,8 @@ export const updateBootcamp = async (req, res) => {
         message: "no bootcamp found",
       });
     }
-    console.log(req.user.id);
-    console.log(isBootcamp.user);
-    if (isBootcamp.user === req.user._id) {
+
+    if (isBootcamp.user.toString() === req.user._id.toString()) {
       if (isPhotoUpdated) {
         await cloudinary.v2.uploader.delete(isBootcamp.photo_public_id);
         let uploadedFile = await cloudinary.v2.uploader.upload(req.file.path);
@@ -80,14 +79,16 @@ export const deleteBootcamp = async (req, res) => {
   try {
     const { bootcampId } = req.params;
     const bootcamp = await Bootcamp.findOne({ _id: bootcampId });
+
     if (!bootcamp) {
       return res.status(400).json({
         status: false,
         message: "no bootcamp found",
       });
     }
-    const bootcampUser = bootcamp.user;
-    const user = req.user._id;
+    const bootcampUser = bootcamp.user.toString();
+    const user = req.user._id.toString();
+    console.log(bootcampUser, user);
     if (bootcampUser === user) {
       const deletedBootcamp = await Bootcamp.findOneAndDelete({
         _id: bootcampId,
@@ -95,7 +96,7 @@ export const deleteBootcamp = async (req, res) => {
 
       const courses = await Course.find({ bootcamp: bootcampId });
       if (courses.length > 0) {
-        await Course.deleteMany({ bootcamp: _id });
+        await Course.deleteMany({ bootcamp: bootcampId });
       }
       if (deletedBootcamp) {
         return res.status(200).json({
